@@ -1,0 +1,30 @@
+{ 
+  "version": "0.2.0", 
+  "configurations": [ 
+      { 
+          "name": "(gdb) Starten", 
+          "type": "cppdbg", 
+          "request": "launch", 
+          "program": "${workspaceFolder}/app/main.exe", 
+          "preLaunchTask": "compile", 
+          "stopAtEntry": false, 
+          "cwd": "${workspaceFolder}", 
+          "environment": [],
+          "externalConsole": true, 
+          "MIMode": "gdb", 
+          "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe", 
+          "setupCommands": [ 
+              { 
+                  "description": "Automatische Strukturierung und Einrückung für \"gdb\" aktivieren", 
+                  "text": "-enable-pretty-printing", 
+                  "ignoreFailures": true 
+              }, 
+              { 
+                  "description": "Disassemlierungsvariante auf Intel festlegen", 
+                  "text": "-gdb-set disassembly-flavor intel", 
+                  "ignoreFailures": true 
+              } 
+          ] 
+      } 
+  ] 
+} 
