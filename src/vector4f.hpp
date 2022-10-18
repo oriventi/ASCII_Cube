@@ -1,99 +1,68 @@
 #pragma once
 
-#include <math.h>
-
-#include <iostream>
-
-const static float min = 0.00005f;
+#include "vector.hpp"
 
 namespace acm
 {
-    class vector4f
+    class vector4f : public vector
     {
     public:
-        vector4f() : x(0.f), y(0.f), z(0.f), w(0.f) {}
+        vector4f(float x, float y, float z, float w)
+            : vector(4, new float[4]{x, y, z, w}) {}
 
-        vector4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+        vector4f()
+            : vector(4, new float[4]{0.f, 0.f, 0.f, 0.f}) {}
 
-        inline double getLength() const
+        ~vector4f() {}
+
+        inline float x() const
         {
-            return sqrt(x * x + y * y + z * z + w * w);
+            return getComponent(0);
         }
 
-        inline bool isNull() const
+        inline float y() const
         {
-            return (abs(x) < min &&
-                    abs(y) < min &&
-                    abs(z) < min &&
-                    abs(w) < min)
-                       ? true
-                       : false;
+            return getComponent(1);
         }
 
-        inline bool isEqual(const vector4f &v1) const
+        inline float z() const
         {
-            return (abs(x - v1.x) < min &&
-                    abs(y - v1.y) < min &&
-                    abs(z - v1.z) < min &&
-                    abs(w - v1.w) < min)
-                       ? true
-                       : false;
+            return getComponent(2);
+        }
+
+        inline float w() const
+        {
+            return getComponent(3);
+        }
+
+        inline static double dotProduct(const vector4f &v1, const vector4f &v2)
+        {
+            return v1.x() * v2.x() + v1.y() * v2.y() + v1.z() * v2.z() + v1.w() * v2.w();
+        }
+
+        inline static vector4f multiplyScalar(const vector4f &v1, float scalar)
+        {
+            return vector4f(scalar * v1.x(), scalar * v1.y(), scalar * v1.z(), scalar * v1.w());
+        }
+
+        inline static vector4f add(const vector4f &v1, const vector4f &v2)
+        {
+            return vector4f(v1.x() + v2.x(), v1.y() + v2.y(), v1.z() + v2.z(), v1.w() + v2.w());
         }
 
         inline double distanceTo(const vector4f &v1) const
         {
-            return sqrt((x - v1.x) * (x - v1.x) +
-                        (y - v1.y) * (y - v1.y) +
-                        (z - v1.z) * (z - v1.z) +
-                        (w - v1.w) * (w - v1.w));
-        }
-
-        void normalize()
-        {
-            double length = getLength();
-            x /= length;
-            y /= length;
-            z /= length;
-        }
-
-        static float dot(const vector4f &v1, const vector4f &v2)
-        {
-            return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
-        }
-
-        static vector4f multiplyScalar(const vector4f &v1, float scalar)
-        {
-            return vector4f(v1.x * scalar, v1.y * scalar, v1.z * scalar, v1.w * scalar);
-        }
-
-        static vector4f add(const vector4f &v1, const vector4f &v2)
-        {
-            return vector4f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w);
+            return sqrt((x() - v1.x()) * (x() - v1.x()) +
+                        (y() - v1.y()) * (y() - v1.y()) +
+                        (z() - v1.z()) * (z() - v1.z()) +
+                        (w() - v1.w()) * (w() - v1.w()));
         }
 
         friend vector4f operator+(const vector4f &v1, const vector4f &v2);
         friend vector4f operator-(const vector4f &v1, const vector4f &v2);
-        friend vector4f operator*(const vector4f &v1, float scalar);
-
-        bool operator==(const vector4f &v1) const
-        {
-            return isEqual(v1);
-        }
-
-        bool operator!=(const vector4f &v1) const
-        {
-            return !isEqual(v1);
-        }
-
-        void print() const
-        {
-            std::cout << "x: " << x << " y: " << y << " z: " << z << " w: " << w << std::endl;
-        }
-
-        float x;
-        float y;
-        float z;
-        float w;
+        friend vector4f operator*(double scalar, const vector4f &v1);
+        friend vector4f operator*(const vector4f &v1, double scalar);
+        friend vector4f operator/(const vector4f &v1, double scalar);
     };
 
     vector4f operator+(const vector4f &v1, const vector4f &v2)
@@ -103,17 +72,21 @@ namespace acm
 
     vector4f operator-(const vector4f &v1, const vector4f &v2)
     {
-        vector4f subtrahend = v2 * -1;
-        return vector4f::add(v1, subtrahend);
+        return vector4f::add(v1, v2 * -1);
     }
 
-    vector4f operator*(const vector4f &v1, float scalar)
+    vector4f operator*(double scalar, const vector4f &v1)
     {
         return vector4f::multiplyScalar(v1, scalar);
     }
 
-    vector4f operator*(float scalar, const vector4f &v1)
+    vector4f operator*(vector4f &v1, double scalar)
     {
         return vector4f::multiplyScalar(v1, scalar);
+    }
+
+    vector4f operator/(vector4f &v1, double scalar)
+    {
+        return vector4f::multiplyScalar(v1, 1 / scalar);
     }
 }
