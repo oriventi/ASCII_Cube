@@ -61,7 +61,7 @@ namespace acm
 
         inline void print() const
         {
-            std::cout << "--Matrix--" << std::endl;
+            std::cout << "-Matrix-" << std::endl;
             for (unsigned char row = 0; row < 2; ++row)
             {
                 for (unsigned char col = 0; col < 2; ++col)
@@ -70,7 +70,7 @@ namespace acm
                 }
                 std::cout << std::endl;
             }
-            std::cout << "----------" << std::endl;
+            std::cout << "-------" << std::endl;
         }
 
         inline float getData(unsigned char row, unsigned char col) const

@@ -72,7 +72,7 @@ namespace acm
 
     vector4f operator-(const vector4f &v1, const vector4f &v2)
     {
-        return vector4f::add(v1, v2 * -1);
+        return vector4f::add(v1, -1 * v2);
     }
 
     vector4f operator*(double scalar, const vector4f &v1)
